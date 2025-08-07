@@ -1,0 +1,11 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Helm Deploy') {
+            steps {
+                bat 'C:\\ProgramData\\chocolatey\\bin\\helm.exe upgrade --install my-webapp ./webapp --namespace default'
+            }
+        }
+    }
+}
