@@ -1,10 +1,3 @@
-Got it ✅
-Here’s the **full documentation** in clean Markdown format — ready for **copy & paste** into your repo’s `README.md`.
-I’ve added **image/code placeholders** and a **Challenges Faced** section at the end.
-
----
-
-````markdown
 # 📘 Deploying a Web Application Using Helm in Kubernetes with Jenkins CI/CD
 
 ## 📌 Introduction
@@ -16,9 +9,19 @@ This project demonstrates how to deploy a web application to Kubernetes using **
 - Using Helm to manage Kubernetes deployments
 - Automating the build and deployment with a Jenkins pipeline
 
-🖼️ *Image Placeholder:* Diagram showing Jenkins → Helm → Kubernetes pipeline
+## 📌 Project Objectives
+The main goals of this project are:
+1. **Automate** the build, test, and deployment process using **Jenkins**.
+2. **Containerize** the application using **Docker** for consistency across environments.
+3. **Deploy** the application to **Kubernetes** using automated manifests.
+4. Enable **Continuous Integration & Continuous Deployment (CI/CD)** workflows.
+5. Practice industry-standard DevOps tools and workflows.
 
 ---
+
+## 📂 GitHub Repository
+🔗 **Repository URL:** [https://github.com/Techytobii/web-app-using-helm.git](https://github.com/username/repo-name)
+
 
 ## 📄 Overview
 
@@ -28,8 +31,6 @@ This project demonstrates how to deploy a web application to Kubernetes using **
 3. Docker image is built and pushed to registry.
 4. Helm deploys/updates the Kubernetes resources.
 5. Application becomes accessible via LoadBalancer/Ingress.
-
-🖼️ *Image Placeholder:* Pipeline stages diagram
 
 ---
 
@@ -45,7 +46,8 @@ This project demonstrates how to deploy a web application to Kubernetes using **
   - Git integration
 - Git repository containing application source code and Helm chart
 
-🖼️ *Screenshot Placeholder:* Output of `kubectl get nodes`
+🖼️ ![kubectl-get-nodes](./img/kubectl-get-nodes.png)
+`kubectl get nodes`
 
 ---
 
@@ -75,7 +77,7 @@ web-app-using-helm/
 └── .gitignore
 ````
 
-🖼️ *Screenshot Placeholder:* VS Code file tree
+🖼️ ![project-tree](./img/project-tree.png)
 
 ---
 
@@ -99,24 +101,7 @@ EXPOSE 3000
 CMD ["npm", "start"]
 ```
 
-**Python Example**
-
-```dockerfile
-FROM python:3.11-slim
-
-WORKDIR /app
-
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY . .
-
-EXPOSE 8000
-CMD ["python", "app.py"]
-```
-
-🖼️ *Screenshot Placeholder:* Docker build logs
-
+![docker-build-output](./img/docker-build-output.png)
 ---
 
 ## 📦 Helm Deployment File (`helm-web-app/templates/deployment.yaml`)
@@ -146,8 +131,6 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
 ```
-
-🖼️ *Screenshot Placeholder:* Helm install output
 
 ---
 
@@ -200,7 +183,6 @@ pipeline {
 }
 ```
 
-🖼️ *Screenshot Placeholder:* Jenkins build pipeline view
 
 ---
 
@@ -220,8 +202,19 @@ kubectl get pods
 kubectl get svc
 ```
 
-🖼️ *Screenshot Placeholder:* Kubernetes pods running
+ ![kubectl-get-pods](./img/kubectl-get-pods.png)
 
+`kubectl get pods`
+Kubernetes pods running
+
+`kubectl get svc`
+
+![kubectl-get-svc](./img/kubectl-get-svc.png)
+Kubernetes service details
+---
+## Nginx Web Output
+
+![nginx-web-output](./img/nginx-website.png)
 ---
 
 ## 🧹 Cleanup
@@ -229,8 +222,7 @@ kubectl get svc
 ```bash
 helm uninstall web-app
 ```
-
-🖼️ *Screenshot Placeholder:* Helm uninstall output
+![helm-install](./img/helm-uninstall.png)
 
 ---
 
@@ -258,8 +250,6 @@ During the project, the following issues were encountered and resolved:
    * Cause: Cloud provider provisioning delay.
    * Solution: Waited for external IP to be assigned and verified service.
 
-🖼️ *Screenshot Placeholder:* Error log screenshot and solution steps
-
 ---
 
 ## 📓 Conclusion
@@ -271,12 +261,4 @@ By combining **Helm** and **Jenkins**, we automated the build and deployment pro
 * Minimal manual intervention
 
 This setup is suitable for production-grade CI/CD pipelines with Kubernetes.
-
-🖼️ *Image Placeholder:* Final architecture diagram showing end-to-end flow
-
-```
-
----
-
-Do you want me to now also prepare a **diagram (Jenkins → Docker → Helm → Kubernetes)** that you can drop in as the architecture screenshot? That would make this README visually stronger.
 ```
