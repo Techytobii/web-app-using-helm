@@ -3,9 +3,7 @@ kind: Pod
 metadata:
   name: "{{ include "webapp.fullname" . }}-test-connection"
   labels:
-    {{- include "webapp.labels" . | nindent 4 }}
-  annotations:
-    "helm.sh/hook": test
+    app: {{ include "webapp.name" . }}
 spec:
   containers:
     - name: wget

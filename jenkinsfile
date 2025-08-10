@@ -1,10 +1,32 @@
 pipeline {
     agent any
 
+    environment {
+        KUBECONFIG = credentials('kubeconfig-file') // store kubeconfig as Jenkins secret file
+    }
+
     stages {
-        stage('Helm Deploy') {
+        stage('Checkout Code') {
             steps {
-                bat 'C:\\ProgramData\\chocolatey\\bin\\helm.exe upgrade --install my-webapp ./webapp --namespace default'
+                git branch: 'main', url: 'https://github.com/<your-username>/<your-repo>.git'
+            }
+        }
+
+        stage('Build & Lint Helm Chart') {
+            steps {
+                sh '''
+                helm lint .
+                '''
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh '''
+                helm upgrade --install web-app . \
+                    --namespace default \
+                    --create-namespace
+                '''
             }
         }
     }
