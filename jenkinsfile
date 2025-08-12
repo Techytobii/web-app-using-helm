@@ -1,33 +1,46 @@
 pipeline {
-    agent any
-
-    environment {
-        KUBECONFIG = credentials('kubeconfig-file') // store kubeconfig as Jenkins secret file
+  agent any
+  environment {
+    // optionally: HELM_EXPERIMENTAL_OCI=1 if you use OCI charts
+  }
+  stages {
+    stage('Checkout') {
+      steps { checkout scm }
     }
 
-    stages {
-        stage('Checkout Code') {
-            steps {
-                git branch: 'main', url: 'https://github.com/<your-username>/<your-repo>.git'
-            }
+    stage('Build & Push Image (optional)') {
+      when { expression { return fileExists('Dockerfile') } }
+      steps {
+        script {
+          // requires Docker plugin or run on agent with docker available
+          def img = docker.build("myorg/myapp:${env.BUILD_NUMBER}")
+          docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-creds') {
+            img.push()
+          }
+          // store for later
+          env.IMAGE = "myorg/myapp:${env.BUILD_NUMBER}"
         }
-
-        stage('Build & Lint Helm Chart') {
-            steps {
-                sh '''
-                helm lint .
-                '''
-            }
-        }
-
-        stage('Deploy to Kubernetes') {
-            steps {
-                sh '''
-                helm upgrade --install web-app . \
-                    --namespace default \
-                    --create-namespace
-                '''
-            }
-        }
+      }
     }
+
+    stage('Deploy with Helm') {
+      steps {
+        // 'kubeconfig-dev' is the credentials ID you created (Secret file)
+        withCredentials([file(credentialsId: 'kubeconfig-dev', variable: 'KUBECONFIG_FILE')]) {
+          sh '''
+            export KUBECONFIG="$KUBECONFIG_FILE"
+            helm repo add mycharts https://charts.example.com || true
+            helm repo update
+            helm lint ./chart
+            helm upgrade --install myapp-dev ./chart \
+              --namespace dev --create-namespace \
+              --set image.repository=myorg/myapp \
+              --set image.tag=${BUILD_NUMBER} \
+              --values values-dev.yaml \
+              --wait --timeout 10m
+          '''
+        }
+      }
+    }
+  }
 }
